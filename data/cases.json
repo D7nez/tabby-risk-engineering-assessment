@@ -1,0 +1,2792 @@
+[
+  {
+    "id": "R1-001",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 2000 (lower bound) + phone not verified",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "amount >= 2000 is inclusive; phone_verified=False satisfies the weak-signal OR."
+  },
+  {
+    "id": "R1-002",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 1999.99 (just below bound) + phone not verified",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1999.99,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "One cent below the threshold: branch A must not fire; branch B needs 4000."
+  },
+  {
+    "id": "R1-003",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "EP",
+    "scenario": "amount = 2000 + phone verified + device_age = 2",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": true,
+      "device_age_days": 2,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "device_age_days < 3 alone is enough (phone is verified)."
+  },
+  {
+    "id": "R1-004",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "BVA",
+    "scenario": "device_age = 3 (bound) with phone verified, amount 2000",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": true,
+      "device_age_days": 3,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "device_age_days < 3 is strict: 3 is NOT weak. Both weak signals absent → approve."
+  },
+  {
+    "id": "R1-005",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "BVA",
+    "scenario": "device_age = 0 (min) , amount 2000",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": true,
+      "device_age_days": 0,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Lowest valid device age is still < 3."
+  },
+  {
+    "id": "R1-006",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "EP",
+    "scenario": "Both weak signals present (phone False + device_age 2)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 2,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "OR with both operands true → single rejection, name listed once."
+  },
+  {
+    "id": "R1-007",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "EP",
+    "scenario": "amount = 2000 but no weak signals",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "High-ish amount alone must not trigger."
+  },
+  {
+    "id": "R1-008",
+    "group": "R1 · Trigger – amount ≥ 2000 branch",
+    "technique": "Branch isolation",
+    "scenario": "amount = 3999.99 + phone False + email_age NULL → fires via branch A only",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 3999.99,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Branch B is not reachable (amount < 4000), so rejection proves branch A works independently."
+  },
+  {
+    "id": "R1-009",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 4000 + email_age NULL",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "NULL email age counts as 'unknown' → weak signal. Phone & device are strong, so only branch B fires."
+  },
+  {
+    "id": "R1-010",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 4000 + email_age = 29",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 29,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "email_age_days < 30 (upper side)."
+  },
+  {
+    "id": "R1-011",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 4000 + email_age = 30 (bound)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 30,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "email_age_days < 30 is strict: 30 is NOT weak."
+  },
+  {
+    "id": "R1-012",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 4000 + email_age = 0 (min)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 0,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Brand-new email address."
+  },
+  {
+    "id": "R1-013",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "BVA",
+    "scenario": "amount = 3999.99 + email_age NULL, other signals strong",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 3999.99,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Just under 4000 and no phone/device weakness → no branch fires."
+  },
+  {
+    "id": "R1-014",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "EP",
+    "scenario": "amount = 4000 with all strong signals",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Amount at top threshold is harmless when email/phone/device are healthy."
+  },
+  {
+    "id": "R1-015",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "EP",
+    "scenario": "Very large amount (100000) + email_age = 10",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 100000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 10,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Far above threshold; guards against upper-range overflow / wrong operator."
+  },
+  {
+    "id": "R1-016",
+    "group": "R1 · Trigger – amount ≥ 4000 branch",
+    "technique": "EP",
+    "scenario": "Both branches true at once (4000, phone False, device 1, email NULL)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": false,
+      "device_age_days": 1,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Rule must appear once in stop_factors, not twice."
+  },
+  {
+    "id": "R1-017",
+    "group": "R1 · Preconditions (count / country)",
+    "technique": "BVA",
+    "scenario": "completed_count = 1 with both branches true",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 1,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "completed_count = 0 is mandatory; 1 is the nearest non-matching value."
+  },
+  {
+    "id": "R1-018",
+    "group": "R1 · Preconditions (count / country)",
+    "technique": "EP",
+    "scenario": "completed_count = 10 with trigger data",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 10,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Established customer – rule must not apply."
+  },
+  {
+    "id": "R1-019",
+    "group": "R1 · Preconditions (count / country)",
+    "technique": "EP",
+    "scenario": "country = KSA with trigger data",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "KSA",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Second allowed country value."
+  },
+  {
+    "id": "R1-020",
+    "group": "R1 · Preconditions (count / country)",
+    "technique": "EP",
+    "scenario": "country = EGY (outside list) with trigger data",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "EGY",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Country not in (UAE, KSA)."
+  },
+  {
+    "id": "R1-021",
+    "group": "R1 · Preconditions (count / country)",
+    "technique": "Error guessing",
+    "scenario": "country = SAU (ISO-3 for Saudi) with trigger data",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "SAU",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Rule lists the literal 'KSA'; a plausible alias must NOT match."
+  },
+  {
+    "id": "R1-022",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered + merchant_tier = trusted",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Rule name recorded, exception suppresses decision (empty)."
+  },
+  {
+    "id": "R1-023",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered (branch B) + merchant_tier = trusted",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Exception works for both branches."
+  },
+  {
+    "id": "R1-024",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered + payment_is_test = \"true\"",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Second exception operand."
+  },
+  {
+    "id": "R1-025",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered (branch B) + payment_is_test = \"true\"",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 4000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Exception works for both branches."
+  },
+  {
+    "id": "R1-026",
+    "group": "R1 · Exceptions",
+    "technique": "Pairwise",
+    "scenario": "Triggered + both exceptions",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "OR of exceptions with both true – still single name, empty decision."
+  },
+  {
+    "id": "R1-027",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered + merchant_tier = premium (not trusted), test = false",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "premium",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Only the exact value 'trusted' is an exception."
+  },
+  {
+    "id": "R1-028",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "NOT triggered + merchant_tier = trusted",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Exception alone must not add a stop factor."
+  },
+  {
+    "id": "R1-029",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "NOT triggered + payment_is_test = \"true\"",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Same, for the second exception."
+  },
+  {
+    "id": "R1-030",
+    "group": "R1 · Exceptions",
+    "technique": "EP",
+    "scenario": "Precondition fails (completed_count=1) + trusted",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 1,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Exception must not turn a non-trigger into a stop factor."
+  },
+  {
+    "id": "R2-001",
+    "group": "R2 · Trigger – overdue branch",
+    "technique": "BVA",
+    "scenario": "max_overdue = 15 (bound) + overdue_amount = 0.01",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 15,
+      "overdue_amount": 0.01,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Both operands exactly on their boundaries (>= 15, > 0)."
+  },
+  {
+    "id": "R2-002",
+    "group": "R2 · Trigger – overdue branch",
+    "technique": "BVA",
+    "scenario": "max_overdue = 14 + overdue_amount = 100",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 14,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "One day below the bound."
+  },
+  {
+    "id": "R2-003",
+    "group": "R2 · Trigger – overdue branch",
+    "technique": "BVA",
+    "scenario": "max_overdue = 15 + overdue_amount = 0",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 15,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "overdue_amount > 0 is strict: 0 does not count."
+  },
+  {
+    "id": "R2-004",
+    "group": "R2 · Trigger – overdue branch",
+    "technique": "EP",
+    "scenario": "max_overdue = 90 + overdue_amount = 5000",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 90,
+      "overdue_amount": 5000,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Deep delinquency."
+  },
+  {
+    "id": "R2-005",
+    "group": "R2 · Trigger – overdue branch",
+    "technique": "EP",
+    "scenario": "Old delinquency fully repaid (max_overdue 100, overdue_amount 0)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 100,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "AND semantics: history alone is not enough."
+  },
+  {
+    "id": "R2-006",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "Decision table",
+    "scenario": "All 3 AND-conditions true (sum 12001 > 12000, score 499, completed 2)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Reference trigger for exposure branch (credit_limit 10000 → threshold 12000)."
+  },
+  {
+    "id": "R2-007",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "outstanding + amount = 12000.00 (== limit × 1.2)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Comparison is strict (>): equality must NOT trigger. Watch float precision of limit × 1.2."
+  },
+  {
+    "id": "R2-008",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "outstanding + amount = 12000.01 (just above)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1000.01,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Smallest step over the threshold."
+  },
+  {
+    "id": "R2-009",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "customer_score_v3 = 500 (bound)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 500,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "score < 500 is strict: 500 does NOT trigger."
+  },
+  {
+    "id": "R2-010",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "Decision table",
+    "scenario": "completed_count = 3 AND repaid_avg = 800 (history is healthy)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 3,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Both OR-operands false → branch off."
+  },
+  {
+    "id": "R2-011",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "completed_count = 3 + repaid_avg = 499.99",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 3,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 499.99,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Second OR-operand alone (repaid_avg < 500)."
+  },
+  {
+    "id": "R2-012",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "completed_count = 3 + repaid_avg = 500 (bound)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 3,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 500,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "repaid_avg < 500 is strict."
+  },
+  {
+    "id": "R2-013",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "BVA",
+    "scenario": "completed_count = 2 + repaid_avg = 800",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "First OR-operand alone (completed_count < 3); upper side of its boundary."
+  },
+  {
+    "id": "R2-014",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "EP",
+    "scenario": "completed_count = 0 + repaid_avg = 0 (brand-new customer)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Lower edge. Country is EGY so Rule 1 stays muted."
+  },
+  {
+    "id": "R2-015",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "EP",
+    "scenario": "Both OR-operands true (completed 2, repaid_avg 499.99)",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 499.99,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Both true → still one stop factor."
+  },
+  {
+    "id": "R2-016",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "EP",
+    "scenario": "Exposure above credit limit and below 120% (5000 + 6000 = 11000)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 6000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 5000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Exceeds credit_limit but not limit × 1.2 → no trigger (checks the 1.2 multiplier is applied)."
+  },
+  {
+    "id": "R2-017",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "EP",
+    "scenario": "amount alone exceeds threshold (outstanding 0, amount 12001)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 12001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Both addends contribute to the sum."
+  },
+  {
+    "id": "R2-018",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "EP",
+    "scenario": "credit_limit = 0 (outstanding 0, amount 1000)",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 0,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Zero limit: 1000 > 0. Guards against division / zero-handling bugs."
+  },
+  {
+    "id": "R2-019",
+    "group": "R2 · Trigger – exposure branch",
+    "technique": "Branch isolation",
+    "scenario": "Both branches true (overdue branch + exposure branch)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Name must appear once in stop_factors."
+  },
+  {
+    "id": "R2-020",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Overdue branch triggered + product_type = pay_in_full",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Name recorded, decision empty."
+  },
+  {
+    "id": "R2-021",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Overdue branch triggered + risk_strategy_type = light",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Second exception operand."
+  },
+  {
+    "id": "R2-022",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Exposure branch triggered + pay_in_full",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Exception works for both branches."
+  },
+  {
+    "id": "R2-023",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Exposure branch triggered + light",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Exception works for both branches."
+  },
+  {
+    "id": "R2-024",
+    "group": "R2 · Exceptions",
+    "technique": "Pairwise",
+    "scenario": "Triggered + both exceptions",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "OR with both true."
+  },
+  {
+    "id": "R2-025",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Triggered + product_type = bnpl, risk_strategy_type = strict",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "bnpl",
+      "risk_strategy_type": "strict"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Other values are not exceptions."
+  },
+  {
+    "id": "R2-026",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "NOT triggered + product_type = pay_in_full",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Exception alone must not add a stop factor."
+  },
+  {
+    "id": "R2-027",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "NOT triggered + risk_strategy_type = light",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Same, second exception."
+  },
+  {
+    "id": "R2-028",
+    "group": "R2 · Exceptions",
+    "technique": "EP",
+    "scenario": "Both branches true + exception",
+    "priority": "P3",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Exception applies to the rule as a whole."
+  },
+  {
+    "id": "X-001",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Neither rule triggered, no exceptions",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Clean approve; stop_factors empty."
+  },
+  {
+    "id": "X-002",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "R1 triggered + R2 triggered, no exceptions",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Both names listed in order R1, R2; reject."
+  },
+  {
+    "id": "X-003",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "R1 triggered w/ exception, R2 triggered w/o exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "'At least one rule without exception' → reject."
+  },
+  {
+    "id": "X-004",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "R1 triggered w/o exception, R2 triggered w/ exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Mirror of X-003."
+  },
+  {
+    "id": "X-005",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Both triggered, both have exceptions (test=true / light)",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Every triggered rule is excepted → decision empty, both names listed."
+  },
+  {
+    "id": "X-006",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Both triggered, both excepted (trusted / pay_in_full)",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Alternate exception operands."
+  },
+  {
+    "id": "X-007",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Only R1 triggered, no exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "R2 absent from stop_factors."
+  },
+  {
+    "id": "X-008",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Only R2 triggered, no exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "R1 absent from stop_factors."
+  },
+  {
+    "id": "X-009",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Only R1 triggered, with exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Single excepted rule → empty decision."
+  },
+  {
+    "id": "X-010",
+    "group": "X · Rule interaction",
+    "technique": "Decision table",
+    "scenario": "Only R2 triggered, with exception",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": null,
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Single excepted rule → empty decision."
+  },
+  {
+    "id": "X-011",
+    "group": "X · Rule interaction",
+    "technique": "EP",
+    "scenario": "No rule triggered, all four exceptions set",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": "approve",
+      "stop_factors": []
+    },
+    "notes": "Exceptions never create stop factors on their own."
+  },
+  {
+    "id": "X-012",
+    "group": "X · Rule interaction",
+    "technique": "Isolation",
+    "scenario": "R1 triggered; R2's exception value present (pay_in_full) but R2 not triggered",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "pay_in_full",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Exceptions must not leak between rules."
+  },
+  {
+    "id": "X-013",
+    "group": "X · Rule interaction",
+    "technique": "Isolation",
+    "scenario": "R1 triggered; risk_strategy_type = light",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "light"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT"
+      ]
+    },
+    "notes": "Same, second R2 exception operand."
+  },
+  {
+    "id": "X-014",
+    "group": "X · Rule interaction",
+    "technique": "Isolation",
+    "scenario": "R2 triggered; R1's exception value present (trusted) but R1 not triggered",
+    "priority": "P1",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Exceptions must not leak between rules."
+  },
+  {
+    "id": "X-015",
+    "group": "X · Rule interaction",
+    "technique": "Isolation",
+    "scenario": "R2 triggered; payment_is_test = \"true\"",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "true",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "Same, second R1 exception operand."
+  },
+  {
+    "id": "X-016",
+    "group": "X · Rule interaction",
+    "technique": "Shared fields",
+    "scenario": "Same data trips both rules via amount (5000), completed_count 0",
+    "priority": "P2",
+    "spec_status": "Per spec",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 5000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": null,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 8000,
+      "credit_limit": 10000,
+      "customer_score_v3": 400,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": {
+      "decision": "reject",
+      "stop_factors": [
+        "NEW_CUSTOMER_HIGH_AMOUNT",
+        "EXPOSURE_LIMIT"
+      ]
+    },
+    "notes": "amount and completed_count feed both rules; checks no cross-interference."
+  },
+  {
+    "id": "Q-001",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "phone_verified = NULL, amount 2000",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": null,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: NULL ≠ False, so rule does not fire (strict reading) – confirm. Alternative: treat unknown as unverified."
+  },
+  {
+    "id": "Q-002",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "device_age_days = NULL, amount 2000",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": true,
+      "device_age_days": null,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: comparison with NULL is unknown → not weak → approve – confirm."
+  },
+  {
+    "id": "Q-003",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "country = \"uae\" (lower-case) with trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "uae",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Case sensitivity of string comparison. Suggested: case-sensitive per spec → approve."
+  },
+  {
+    "id": "Q-004",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "country = NULL with trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": null,
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: NULL not in list → approve."
+  },
+  {
+    "id": "Q-005",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "merchant_tier = \"Trusted\" (capitalised) with trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "Trusted",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: exact match only → reject."
+  },
+  {
+    "id": "Q-006",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "payment_is_test = \"TRUE\" with trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "TRUE",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: exact match only → reject."
+  },
+  {
+    "id": "Q-007",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "payment_is_test = NULL with trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": 2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": null,
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: exception not met → reject."
+  },
+  {
+    "id": "Q-008",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "Negative amount (-2000) with phone not verified",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 0,
+      "country": "UAE",
+      "amount": -2000,
+      "phone_verified": false,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 0,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: input validation error, or approve. Spec silent."
+  },
+  {
+    "id": "Q-009",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "max_overdue_days_180 = NULL, overdue_amount 100",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": null,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: NULL → condition not met → approve."
+  },
+  {
+    "id": "Q-010",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "credit_limit = NULL with exposure trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": null,
+      "customer_score_v3": 499,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: cannot evaluate → branch not met. Confirm."
+  },
+  {
+    "id": "Q-011",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "customer_score_v3 = NULL with exposure trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 2,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": null,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Customers without a score – likely common. Confirm treatment."
+  },
+  {
+    "id": "Q-012",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "repaid_avg = NULL, completed_count = 3, exposure trigger data",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 3,
+      "country": "EGY",
+      "amount": 1001,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 0,
+      "overdue_amount": 0,
+      "outstanding_balance": 11000,
+      "credit_limit": 10000,
+      "customer_score_v3": 499,
+      "repaid_avg": null,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "No repayments yet. Confirm treatment."
+  },
+  {
+    "id": "Q-013",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "product_type = \"PAY_IN_FULL\" (upper-case) with overdue trigger",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 20,
+      "overdue_amount": 100,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "PAY_IN_FULL",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Exact match only → reject (suggested)."
+  },
+  {
+    "id": "Q-014",
+    "group": "Q · Data quality (needs spec)",
+    "technique": "Error guessing",
+    "scenario": "overdue_amount negative (-10), max_overdue 15",
+    "priority": "P3",
+    "spec_status": "Needs clarification",
+    "inputs": {
+      "completed_count": 5,
+      "country": "EGY",
+      "amount": 1000,
+      "phone_verified": true,
+      "device_age_days": 30,
+      "email_age_days": 365,
+      "merchant_tier": "standard",
+      "payment_is_test": "false",
+      "max_overdue_days_180": 15,
+      "overdue_amount": -10,
+      "outstanding_balance": 0,
+      "credit_limit": 10000,
+      "customer_score_v3": 700,
+      "repaid_avg": 800,
+      "product_type": "installments",
+      "risk_strategy_type": "standard"
+    },
+    "expected": null,
+    "notes": "Suggested: -10 > 0 false → approve; also a data-validity question."
+  }
+]
